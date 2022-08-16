@@ -7,7 +7,7 @@ FROM ${BASE_IMAGE} AS builder
 ADD --chown=rust:rust . ./
 
 # Build our application.
-RUN cargo build --release
+RUN cargo build --release -v
 
 # Now, we need to build our _real_ Docker container, copying in `using-diesel`.
 FROM alpine:latest
