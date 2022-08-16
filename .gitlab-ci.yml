@@ -21,8 +21,10 @@ docker-build:
     script:
         - |
             if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-                tag=""
-                echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+                ver=$(sed -n 's/^ *version *= *"\([^"]*\)".*/\1/p' Cargo.toml)
+                git_tag=$CI_COMMIT_SHORT_SHA
+                tag="${ver}+${git_tag}"
+                echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = $tag"
             else
                 tag=":$CI_COMMIT_REF_SLUG"
                 echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
@@ -46,8 +48,10 @@ upload-image:
     script:
         - |
             if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-                tag=""
-                echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
+                ver=$(sed -n 's/^ *version *= *"\([^"]*\)".*/\1/p' Cargo.toml)
+                git_tag=$CI_COMMIT_SHORT_SHA
+                tag="${ver}+${git_tag}"
+                echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = $tag"
             else
                 tag=":$CI_COMMIT_REF_SLUG"
                 echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
