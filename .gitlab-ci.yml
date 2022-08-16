@@ -14,7 +14,8 @@ docker-build:
     image: docker:latest
     stage: build
     services:
-        - docker:dind
+        - name: docker:dind
+          command: ["--mtu=1440"]
     before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
@@ -37,7 +38,8 @@ upload-image:
     image: docker:latest
     stage: upload
     services:
-        - docker:dind
+        - name: docker:dind
+          command: ["--mtu=1440"]
     before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
         - docker login -u "$ACM_USER" -p "$ACM_PASSWORD" $ACM_REGISTRY
