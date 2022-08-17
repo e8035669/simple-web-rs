@@ -19,5 +19,5 @@ async fn main() {
 
     let routes = warp::get().and(hello_world.or(hi).or(hello).or(version));
 
-    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
+    warp::serve(routes).run(([0, 0, 0, 0], 3030)).await;
 }
