@@ -17,6 +17,7 @@ docker-build:
         - name: docker:dind
           command: ["--mtu=1440"]
     before_script:
+        - until docker info; do sleep 1; done
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
         - |
@@ -43,6 +44,7 @@ upload-image:
         - name: docker:dind
           command: ["--mtu=1440"]
     before_script:
+        - until docker info; do sleep 1; done
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
         - docker login -u "$ACM_USER" -p "$ACM_PASSWORD" $ACM_REGISTRY
     script:
