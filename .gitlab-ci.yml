@@ -46,7 +46,7 @@ upload-image:
     before_script:
         - until docker info; do sleep 1; done
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        - docker login -u "$ACM_USER" -p "$ACM_PASSWORD" $ACM_REGISTRY
+        - docker login -u "$HARBOR_USER" -p "$HARBOR_PASSWORD" $HARBOR_REGISTRY
     script:
         - |
             if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
@@ -59,7 +59,31 @@ upload-image:
                 echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
             fi
         - docker pull "$CI_REGISTRY_IMAGE${tag}"
-        - docker tag "$CI_REGISTRY_IMAGE${tag}" "$ACM_REGISTRY/$ACM_PROJECT/$CI_REGISTRY_IMAGE${tag}"
-        - docker push "$ACM_REGISTRY/$ACM_PROJECT/$CI_REGISTRY_IMAGE${tag}"
+        - docker tag "$CI_REGISTRY_IMAGE${tag}" "$HARBOR_REGISTRY/$HARBOR_PROJECT/$CI_REGISTRY_IMAGE${tag}"
+        - docker push "$HARBOR_REGISTRY/$HARBOR_PROJECT/$CI_REGISTRY_IMAGE${tag}"
     rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+deploy-project:
+    image: alpine:latest
+    stage: deploy
+    before_script:
+        - apk add jq
+        - apk add curl
+    script:
+        - |
+            if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+                ver=$(sed -n 's/^ *version *= *"\([^"]*\)".*/\1/p' Cargo.toml)
+                git_tag=$CI_COMMIT_SHORT_SHA
+                tag=":${ver}.${git_tag}"
+                echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = $tag"
+            else
+                tag=":$CI_COMMIT_REF_SLUG"
+                echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
+            fi
+        - export IMAGE_URL="${HARBOR_PROJECT}/${CI_REGISTRY_IMAGE}${tag}"
+        - export DEPLOY_VER="${ver}.${git_tag}"
+        - sh scripts/deploy_project.sh
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
