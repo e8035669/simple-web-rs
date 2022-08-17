@@ -82,7 +82,7 @@ deploy-project:
                 echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
             fi
         - export IMAGE_URL="${HARBOR_PROJECT}/${CI_REGISTRY_IMAGE}${tag}"
-        - export DEPLOY_VER="${ver}+${git_tag}"
+        - export DEPLOY_VER="${ver}-${git_tag}"
         - sh scripts/deploy_project.sh
     rules:
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
