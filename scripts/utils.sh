@@ -39,7 +39,9 @@ create_project() {
         "name": "${deploy_name}",
         "version": "${deploy_ver}",
         "description": "${deploy_desc}",
-        "imageUrl": "${image_url}"
+        "imageUrl": "${image_url}",
+        "portType": "ClusterIP",
+        "servicePortList": [{"port": "3030", "protocol": "HTTP"}]
     },
     "bundleIcon": "https://media.istockphoto.com/vectors/microservices-icon-vector-vector-id1136809649"
 }
