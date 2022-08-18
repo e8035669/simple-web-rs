@@ -7,7 +7,7 @@ deploy_ver=${DEPLOY_VER}
 image_url=${IMAGE_URL}
 
 deploy_name="simple-web"
-deploy_desc="test"
+deploy_desc="ACM auto create project and auto deploy."
 
 host="https://hks.hicloud.hinet.net/api"
 
