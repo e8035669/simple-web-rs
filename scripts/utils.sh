@@ -48,10 +48,10 @@ create_project() {
 EOF
 
     create_result=$(    \
-        curl -s -X POST ${host}/acm-cnab/v1/onestep            \
+        curl -X POST ${host}/acm-cnab/v1/onestep            \
         -H 'Content-Type: application/json;charset=UTF-8'   \
         -H "Authorization: Bearer ${access_token}"          \
-        -d $(jq . -c deploy_data1.json)                      \
+        -d "$(jq . -c deploy_data1.json)"                   \
     )
 
     echo ${create_result} | jq .
@@ -88,10 +88,10 @@ deploy_project() {
 EOF
 
     deploy_result=$(\
-        curl -s -X PUT ${host}/acm-cnab/v1/continuous/deployment/           \
-        -H 'Content-Type: application/json;charset=UTF-8'   \
-        -H "Authorization: Bearer ${access_token}"          \
-        -d $(jq . -c deploy_data2.json)                      \
+        curl -X PUT ${host}/acm-cnab/v1/continuous/deployment/   \
+        -H 'Content-Type: application/json;charset=UTF-8'           \
+        -H "Authorization: Bearer ${access_token}"                  \
+        -d "$(jq . -c deploy_data2.json)"                           \
     )
 
     echo ${deploy_result} | jq .
