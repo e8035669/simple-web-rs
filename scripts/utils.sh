@@ -40,10 +40,11 @@ create_project() {
         "version": "${deploy_ver}",
         "description": "${deploy_desc}",
         "imageUrl": "${image_url}",
-        "portType": "ClusterIP",
-        "servicePortList": [{"port": "3030", "protocol": "HTTP"}]
+        "portType": "NodePort",
+        "servicePortList": [{"port": "3030", "protocol": "TCP", "nodePort": "30030"}]
     },
-    "bundleIcon": "https://media.istockphoto.com/vectors/microservices-icon-vector-vector-id1136809649"
+    "bundleIcon": "https://media.istockphoto.com/vectors/microservices-icon-vector-vector-id1136809649",
+    "enableTraffic": "true"
 }
 EOF
 
